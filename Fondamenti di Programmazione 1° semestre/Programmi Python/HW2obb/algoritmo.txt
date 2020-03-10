@@ -1,0 +1,130 @@
+---------------------------------------------------------------------------------------------
+
+Date: 01/11/2019
+
+--------------------------------------- ALGORITMO -------------------------------------------
+
+Questo programma serve a simulare una corsa automobilista con dei piloti.
+Nonostante sembri semplice a prima vista, non ci si impiega molto ad accorgersi che 
+con un approccio normale il programma diventa lento molto in fretta.
+
+Per rendere il programma più efficiente era necessario risolvere il problema principale,
+ossia trovare la posizione del pilota con un certo ID senza dover ogni volta scorrere la lista.
+Infatti, questo avrebbe consumato una grande quantità di risorse e avrebbe fatto in men 
+che non si dica andare il programma in time-out.
+
+In un primo approccio al problema mi ero servito di un dizionario.
+Incrociando il dizionario con una lista, riuscivo a sapere chi fosse l'elemento in una determinata 
+posizione e quale fosse la posizione di un determinato elemento.
+In questo dizionario c'era infatti corrispondenza tra l'ID del pilota (la chiave) e la sua 
+posizione in classifica (il valore). 
+
+Nonostante questo approccio abbreviasse i tempi di parecchio, non era comunque abbastanza efficiente per 
+superare il test esempio5, il più pesante.
+
+Per superarlo ho utilizzato un approccio diverso, che mi avrebbe permesso di risparmiare tempo sul
+modificare le posizioni dei piloti nel dizionario.
+
+Ho utilizzato perciò un unico dizionario (senza lista), che ha come indice il pilota e come valore una lista 
+contenente l'elemento che lo precede (indice 0) e quello che lo succede (indice 1).
+Il primo elemento e l'ultimo elemento hanno rispettivamente None come valore del proprio precedente e del
+proprio successivo. In questo modo, sono in grado di riconoscere chi è il pilota in prima posizione e 
+chi quello nell'ultima.
+
+- ESEMPIO:
+
+Consideriamo l'esempio in cui i piloti in classifica sono questi 
+(ordinati dal primo all'ultimo posto).
+
+[5,3,2,4,1]
+
+Il dizionario è composto in questo modo.
+
+{5:[None,3],3:[5,2],2:[3,4],4:[2,1],1:[4, None]}
+
+In questo modo mi bastava modificare propriamente i valori della lista durante lo scambio e le eliminazioni.
+Mentre è ovvio che lo scambio consista nel modificare gli indici degli elementi propriamente,
+non è altrettanto ovvio che per l'eliminazione si faccia lo stesso, senza effettivamente rimuovere
+alcun elemento dal dizionario (che avrebbe comportato un grande consumo di tempo non necessario).
+
+Però, nonostante avrei sicuramente passato il test di esempio con questo approccio, non mi sono accontentato.
+Infatti, ho deciso di implementare un metodo di calcolo degli indici e delle operazioni che, nonostante mi avrebbe
+fatto perdere un po' più di tempo per i test più corti e casuali, mi avrebbe fatto guadagnare parecchio tempo nei
+test di grandi dimensioni con tante operazioni che riguardassero elementi in un determinato ordine.
+
+Il programma che ho creato analizza infatti due pattern addizionali:
+- se l'operazione di scambio successiva riguarda il pilota nella posizione precedente;
+- se l'operazione di eliminazione successiva riguarda piloti nelle strette vicinanze del pilota.
+
+Uno scambio singolo, infatti, segue un algoritmo preciso che ho analizzato graficamente con estrema precisione in un
+file Word. Lo stesso algoritmo viene utilizzato però anche nello scambio di più elementi in successione.
+
+- ESEMPIO:
+
+["s2","s3","s4"]
+
+{4 [None, 3], 3 [4, 2], 2 [3, 1], 1 [2, None]} (dal primo posto all'ultimo)
+
+Normalmente, uno scambio avverebbe così.
+Viene letto il primo elemento della lista contentente le operazioni, e otteniamo il valore "s2".
+
+Questo significa che il pilota con ID 2 viene superato, e bisogna effettuare lo scambio con il pilota che lo succede
+in classifica (in questo caso 1).
+
+Lo scambio viene quindi effettuato applicando l'algoritmo.
+Il risultato è il seguente dizionario (l'ordine degli ID nel dizionario non cambia realmente, è solo per visualizzarlo meglio):
+
+{4 [None, 3], 3 [4, 2], 1 [3, 2], 2 [1, None]}
+
+Si passa poi al secondo elemento, "s3".
+Il pilota con ID 3 viene superato, e in questo caso, il pilota che lo succede in classifica è sempre 1.
+Quindi si effettua lo scambio e si continua fino alla fine della lista.
+
+Il risultato finale sarebbe questo:
+
+{1 [None, 4], 4 [1, 3], 3 [4, 2], 2 [3, None]} 
+
+Questo procedimento effettua gli scambi ogni volta che incontra un item nella lista delle operazioni.
+Però, se ci facciamo caso, il pilota con ID 3 non ha subito cambiamenti di valore rispetto alla condizione iniziale.
+
+Il pattern diventa più evidente per liste più lunghe.
+
+["s2","s3","s4","s5","s6"]
+{6 [None, 5], 5 [6, 4], 4 [5, 3], 3 [4, 2], 2 [3, 1], 1 [2, 0], 0 [1, None]}
+
+Il risultato finale è:
+
+{1 [None, 6], 6 [1, 5], 5 [6, 4], 4 [5, 3], 3 [4, 2], 2 [3, 0], 0 [2, None]}
+
+Come possiamo notare, i valori dei piloti con ID 5, 4 e 3 sono rimasti invariati.
+I valori dei piloti 6 e 2 invece, mostrano un cambiamento rispettivamente nell'elento che li precede 
+e in quello che li succede. L'elemento 1, che è quello trascinato all'ultimo posto, ha scambiato il 
+suo valore all'indice 0 con quello dell'elemento con cui è stato scambiato per ultimo, 
+e quello all'indice 1 è diventato uguale all'elemento con cui è stato scambiato per ultimo.
+
+Il pilota con ID 0, che era originariamente il pilota che succedeva 1, si trova cambiato 
+il proprio valore ad indice 0 con l'elemento che sarebbe dovuto essere scambiato per primo.
+
+Questo stesso algoritmo si ripete per liste di lunghezze arbitrarie ma che seguono tutte uno stesso pattern, 
+ossia che l'elemento successivo nella lista delle operazioni sia uno scambio che si riferisce all'elemento
+precedente dell'elemento preso in considerazione all'inizio.
+
+In questo modo è possibile eliminare un numero elevatissimo di scambi, risparmiando parecchio tempo
+per le liste che presentano questo tipo di scambi.
+
+La stessa scorciatoia può essere utilizzata nelle operazioni di eliminazione, considerando però questa volta
+che l'elemento su cui effettuare l'eliminazione potrebbe torvarsi non solo prima, ma anche dopo dell'elemento scelto 
+in precedenza. L'algoritmo cerca di inglobare più piloti uno vicino all'altro possibili, per poi
+tagliare il collegamento e sostituirlo con uno diretto, al posto di tagliare ogni singola sezione del filo e modificarla
+per ottenere il risultato sperato. 
+ 
+
+Queste sono le due strategie che mi hanno permesso di risparmiare tempo in alcuni tipi di operazioni, che pur essendo casi
+abbastanza specifici, possono accadere e tolgono quel peso non necessario dal programma.
+
+
+Una volta effettuate tutte le operazioni, per evitare di cercare il primo classificato nel dizionario, 
+se ne tiene traccia durante scambi ed eliminazioni attraverso una serie di try except, e si ricostruisce la classifica partendo
+dal primo elemento fino all'ultimo.
+
+Per ulteriori informazioni sull'algoritmo in modo più specifico, consultare i commenti presenti nello script stesso.

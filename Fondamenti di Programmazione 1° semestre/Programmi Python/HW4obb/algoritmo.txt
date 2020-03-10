@@ -1,0 +1,33 @@
+﻿---------------------------------------------------------------------------------------------
+
+Date: 09/11/2019
+
+--------------------------------------- ALGORITMO -------------------------------------------
+
+Il programma effettua una prima lettura sul file di testo in cui acquisisce tutte le stringhe
+del file (gestendo gli accapo) e le salva in una lista. 
+Durante la prima lettura, il programma memorizza la stringa più corta che ci servirà più tardi.
+
+Poi, un metodo si occupa di trovare la chiave segreta.
+Questo metodo è molto efficiente e si serve degli insiemi.
+
+Una prima scrematura è effettuata durante il passaggio della lista come parametro, che viene 
+convertita in set per eliminare tutte le stringhe uguali e diminuire il carico di lavoro.
+
+Una seconda scrematura avviene nel metodo: infatti, dopo un controllo iniziale per mantenere
+solo le sottostringhe che appaiono nell'elemento solo una volta, l'insieme delle sottostringhe
+ottenute (B) viene confrontato con ogni sottostringa dell'elemento più corto (A).
+Fatto ciò, si ottiene l'insieme delle sottostringhe che appartengono sia ad A che a B soltanto una volta.
+Questo insieme verrà utilizzato come insieme di confronto per i successivi elementi della lista.
+
+Il processo continua per tutti gli elementi della lista (quella che ha subito la prima scrematura), 
+finché nell'insieme non risulta presente soltanto un elemento.
+
+A quel punto, la chiave è stata trovata e il passaggio successivo è stampare la lista degli indici 
+per ogni elemento della lista (la prima lista, quella intera e che non ha subito la prima scrematura),
+in cui si trova la parola segreta. 
+Questo lavoro è affidato ad un metodo apposito.
+
+Per ulteriori informazioni sull'algoritmo, leggere i commenti presenti nello script stesso.
+
+

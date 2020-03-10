@@ -1,0 +1,17 @@
+﻿---------------------------------------------------------------------------------------------------
+
+Date: 10/12/2019
+
+------------------------------------------ ALGORITMO ----------------------------------------------
+
+Il programma effettua una prima lettura sul file di testo e acquisisce in input una matrice di lettere
+e un dizionario in cui è memorizzata la posizione di ogni lettera. 
+
+Per verificare se le parole nella matrice siano valide, scorrendo la matrice stessa, ogni volta che 
+trovo l'iniziale di una delle parole che devo cercare, controllo per ogni parola, fino a raggiungere
+la lunghezza di ogni parola, se la parola trovata è quella corretta. 
+
+Se la parola viene trovata, viene memorizzato il percorso che si è seguito per trovarla e la posizione
+da cui è partita la ricerca, e viene rimossa dalle parole da trovare, in modo da alleggerire il carico.
+
+ 

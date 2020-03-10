@@ -1,0 +1,54 @@
+﻿---------------------------------------------------------------------------------------------------
+
+Date: 24/11/2019
+
+------------------------------------------ ALGORITMO ----------------------------------------------
+
+Il programma effettua una prima lettura sull'immagine in cui acquisisce tutti i pixel.
+
+Una volta effettuata la lettura, il progamma va alla ricerca del primo nodo verde e scorre per tutta 
+l'immagine finché non ne trova uno. Una volta trovato, ne memorizza la posizione e, a partire da esso, 
+cerca un secondo nodo verde prima orizzontalmente, e poi, nel caso la griglia fosse larga 1 pixel, 
+lo cerca verticalmente. Questo nodo servirà al programma per memorizzare la distanza tra due pixel verdi,
+in modo tale che durante la lettura per l'acquisizione dei nodi il programma non debba scorrere tutti 
+i pixel (neri o rossi che siano) inutilmente.
+
+Una volta calcolato il "gap" (salto) tra un nodo e l'altro, il programma usa queste informazioni per
+trovare gli ultimi indici della grliglia, in modo tale che sappia quando fermarsi.
+Viene calcolato il primo indice della griglia a partire da destra e a partire dal basso.
+
+Il programma restituisce 0 se il primo pixel della griglia non è sato trovato (la griglia non esiste) o 
+il gap non è stato trovato (la griglia è fatta da un solo nodo) e la lunghezza del lato del quadrato è
+un numero diverso da 0 (altrimenti restituisce 1).
+
+Trovati gli indici di larghezza e lunghezza della griglia, si passa all'analisi dei nodi della griglia.
+Il programma infatti, scorre i nodi della griglia uno ad uno e restituisce un insieme di tuple, ogni 
+tupla a rappresentare un segmento lungo k.
+Attraverso un opportuno metodo, ottengo un insieme di segmenti lunghi k. Una seconda analisi
+dell'insieme mi permette di mantere al suo interno soltanto i segmenti che hanno il loro opposto a k
+di distanza, ossia se fa parte di una coppia di segmenti che potrebbe formare un quadrato.
+
+ES: Se k è uguale a 2 e il segmento si trova ad y = 0, allora si controlla se nello stesso insieme
+sia presente un segmento che si trova a y + k di distanza partendo dalla stessa coordinata x e di
+lunghezza k.
+
+Ottenuto l'insieme, il programma valuta, attraverso un calcolo, quale dei due possibili metodi seguire 
+per contare i quadrati: se il numero di segmenti trovati è particolarmente alto, allora con lo stesso
+metodo usato per trovare l'insieme di segmenti orrizontali validi, si trova l'insieme dei segmenti
+verticali validi e poi, attraverso un metodo apposito, partendo dagli elementi di un insieme, si trova
+quali sono i lati (perpendicolari) rispetto ai segmenti dell'altro insieme e viceversa (verificandone
+semplicemente la loro presenza) e si restituisce il risultato.
+
+Se invece il numero di segmenti validi non è alto, allora è più sbrigativo, a partire dai segmenti
+orizzontali dell'insieme, verificare se essi abbiano due segmenti verticali che chiudano il
+quadrato, al posto di controllare tutti i segmenti verticali.
+
+Il numero di quadrati viene contato in uno di questi due modi e poi il risultato è restituito.
+
+PS: E' necessario ma non sufficiente che, perché ci sia almeno un quadrato, ci sia almeno un elemento
+nell'insieme dei segmenti orizzontali. In caso contrario, non è possibile in alcun modo che il quadrato
+si chiuda e viene restituito immediatamente zero.
+
+Per ulteriori informazioni sull'algoritmo, leggere i commenti presenti nello script stesso.
+
+
